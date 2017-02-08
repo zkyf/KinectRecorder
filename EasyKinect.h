@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef _LJX_EASYKINECT_H
 #define _LJX_EASTKINECT_H
 
@@ -39,7 +41,7 @@ inline void SafeRelease(Interface *& pInterfaceToRelease)
 /// </summary>
 /// <param name="depthframe">The pointer to the obtained depth frame</param>
 /// <returns>Returns a cv::Mat in CV_16U containing the depth frame</returns>
-cv::Mat depth2mat(IDepthFrame* depthframe)
+static cv::Mat depth2mat(IDepthFrame* depthframe)
 {
   IFrameDescription* size = NULL;
   depthframe->get_FrameDescription(&size);
@@ -68,7 +70,7 @@ cv::Mat depth2mat(IDepthFrame* depthframe)
 /// </summary>
 /// <param name="colorframe">The pointer to the obtained color frame</param>
 /// <returns>Returns a cv::Mat in CV_8UC3 containing the color frame</returns>
-cv::Mat color2mat(IColorFrame* colorframe)
+static cv::Mat color2mat(IColorFrame* colorframe)
 {
   IFrameDescription* size = NULL;
   colorframe->get_FrameDescription(&size);
@@ -79,8 +81,8 @@ cv::Mat color2mat(IColorFrame* colorframe)
   cv::Mat frame(height, width, CV_8UC3, cv::Scalar::all(0));
   static RGBQUAD* colorbuffer = new RGBQUAD[height * width];
   UINT buffersize = height * width * sizeof(RGBQUAD);
-  colorframe->CopyConvertedFrameDataToArray(buffersize, reinterpret_cast<BYTE*>(colorbuffer), ColorImageFormat_Bgra);
-  if (SUCCEEDED(colorframe))
+	HRESULT hr = colorframe->CopyConvertedFrameDataToArray(buffersize, reinterpret_cast<BYTE*>(colorbuffer), ColorImageFormat_Bgra);
+	if (SUCCEEDED(hr))
   {
     for (int i = 0; i < height; i++)
     {
@@ -100,7 +102,7 @@ cv::Mat color2mat(IColorFrame* colorframe)
 /// </summary>
 /// <param name="infraframe">The pointer to the obtained infrared frame</param>
 /// <returns>Returns a cv::Mat in CV_16U containing the infrared frame</returns>
-cv::Mat infra2mat(IInfraredFrame* infraframe)
+static cv::Mat infra2mat(IInfraredFrame* infraframe)
 {
   IFrameDescription* size = NULL;
   infraframe->get_FrameDescription(&size);
@@ -124,7 +126,7 @@ cv::Mat infra2mat(IInfraredFrame* infraframe)
   return frame;
 }
 
-cv::Mat bodyindex2mat(IBodyIndexFrame* bodyindex)
+static cv::Mat bodyindex2mat(IBodyIndexFrame* bodyindex)
 {
 	IFrameDescription* size = NULL;
 	bodyindex->get_FrameDescription(&size);
@@ -427,7 +429,7 @@ public:
 /// Set Identity in a Matrix4
 /// </summary>
 /// <param name="mat">The matrix to set to identity</param>
-void SetIdentityMatrix(Matrix4 &mat)
+static void SetIdentityMatrix(Matrix4 &mat)
 {
 	mat.M11 = 1; mat.M12 = 0; mat.M13 = 0; mat.M14 = 0;
 	mat.M21 = 0; mat.M22 = 1; mat.M23 = 0; mat.M24 = 0;

@@ -17,6 +17,16 @@ class MainWindow : public QMainWindow
 
 	private:
 		Ui::MainWindow *ui;
+		bool recing;
+
+	signals:
+		void Rec();
+
+	public slots:
+		void GetDepthFrame(int, int, uchar*);
+
+	private slots:
+		void on_buttonRec_clicked();
 };
 
 #endif // MAINWINDOW_H
